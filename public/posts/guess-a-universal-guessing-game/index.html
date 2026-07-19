@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Guess - A Universal Guessing Game | Zhaolun&#39;s Blog</title>
+<meta name="title" content="Guess - A Universal Guessing Game" />
+<meta name="description" content="Guess - A Universal Guessing Game
+The program Guess implements a variation of Guess Who. The game goes like this:
+CPU selects random item in category
+while player does not guess it
+    ask player for input
+    if player asked for trait (e.g. height)
+        print value (e.g. 175cm)
+    else if player guessed correctly
+        print You guessed correctly
+        end
+The game also has a show_all mode where all the traits are shown already and the player only has to guess the item." />
+<meta name="keywords" content="" />
+
+
+<meta property="og:url" content="http://localhost:1313/posts/guess-a-universal-guessing-game/">
+	<meta property="og:site_name" content="Zhaolun&#39;s Blog">
+	<meta property="og:title" content="Guess - A Universal Guessing Game">
+	<meta property="og:description" content="Guess - A Universal Guessing Game The program Guess implements a variation of Guess Who. The game goes like this:
+CPU selects random item in category while player does not guess it ask player for input if player asked for trait (e.g. height) print value (e.g. 175cm) else if player guessed correctly print You guessed correctly end The game also has a show_all mode where all the traits are shown already and the player only has to guess the item.">
+	<meta property="og:locale" content="en_us">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-07-19T14:36:59+01:00">
+		<meta property="article:modified_time" content="2026-07-19T14:36:59+01:00">
+
+
+
+
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Guess - A Universal Guessing Game">
+	<meta name="twitter:description" content="Guess - A Universal Guessing Game The program Guess implements a variation of Guess Who. The game goes like this:
+CPU selects random item in category while player does not guess it ask player for input if player asked for trait (e.g. height) print value (e.g. 175cm) else if player guessed correctly print You guessed correctly end The game also has a show_all mode where all the traits are shown already and the player only has to guess the item.">
+
+
+
+
+	<meta itemprop="name" content="Guess - A Universal Guessing Game">
+	<meta itemprop="description" content="Guess - A Universal Guessing Game The program Guess implements a variation of Guess Who. The game goes like this:
+CPU selects random item in category while player does not guess it ask player for input if player asked for trait (e.g. height) print value (e.g. 175cm) else if player guessed correctly print You guessed correctly end The game also has a show_all mode where all the traits are shown already and the player only has to guess the item.">
+	<meta itemprop="datePublished" content="2026-07-19T14:36:59+01:00">
+	<meta itemprop="dateModified" content="2026-07-19T14:36:59+01:00">
+	<meta itemprop="wordCount" content="1942">
+<meta name="referrer" content="no-referrer-when-downgrade" />
+
+  <style>
+  :root {
+    --width: 720px;
+    --font-main: Verdana, sans-serif;
+    --font-secondary: Verdana, sans-serif;
+    --font-scale: 1em;
+    --background-color: #fff;
+    --heading-color: #222;
+    --text-color: #444;
+    --link-color: #3273dc;
+    --visited-color: #8b6fcb;
+    --blockquote-color: #222;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background-color: #01242e;
+      --heading-color: #eee;
+      --text-color: #ddd;
+      --link-color: #8cc2dd;
+      --visited-color: #8b6fcb;
+      --blockquote-color: #ccc;
+    }
+  }
+
+  body {
+    font-family: var(--font-secondary);
+    font-size: var(--font-scale);
+    margin: auto;
+    padding: 20px;
+    max-width: var(--width);
+    text-align: left;
+    background-color: var(--background-color);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.5;
+    color: var(--text-color);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-main);
+    color: var(--heading-color);
+  }
+
+  a {
+    color: var(--link-color);
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  nav a {
+    margin-right: 8px;
+  }
+
+  strong,
+  b {
+    color: var(--heading-color);
+  }
+
+  button {
+    margin: 0;
+    cursor: pointer;
+  }
+
+  time {
+    font-family: monospace;
+    font-style: normal;
+    font-size: 15px;
+  }
+
+  main {
+    line-height: 1.6;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px dashed;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  code {
+    font-family: monospace;
+    padding: 2px;
+    border-radius: 3px;
+  }
+
+  blockquote {
+    border-left: 1px solid #999;
+    color: var(--blockquote-color);
+    padding-left: 20px;
+    font-style: italic;
+  }
+
+  footer {
+    padding: 25px 0;
+    text-align: center;
+  }
+
+  .title:hover {
+    text-decoration: none;
+  }
+
+  .title h1 {
+    font-size: 1.5em;
+  }
+
+  .inline {
+    width: auto !important;
+  }
+
+  .highlight,
+  .code {
+    border-radius: 3px;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    overflow-x: auto;
+  }
+
+  .highlight pre,
+  .code pre {
+    min-width: 100%;
+    width: max-content;
+  }
+
+   
+  ul.blog-posts {
+    list-style-type: none;
+    padding: unset;
+  }
+
+  ul.blog-posts li {
+    display: flex;
+  }
+
+  ul.blog-posts li span {
+    flex: 0 0 130px;
+  }
+
+  ul.blog-posts li a:visited {
+    color: var(--visited-color);
+  }
+
+</style>
+
+</head>
+
+<body>
+  <header><a href="/" class="title">
+  <h2>Zhaolun&#39;s Blog</h2>
+</a>
+<nav>
+</nav>
+</header>
+  <main>
+
+<content>
+  <h1 id="guess---a-universal-guessing-game">Guess - A Universal Guessing Game</h1>
+<p>The program <a href="https://github.com/ZhaolunYin/guess"><strong>Guess</strong></a> implements a variation of <a href="https://en.wikipedia.org/wiki/Guess_Who%3F"><strong>Guess Who</strong></a>. The game goes like this:</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">CPU selects random item in category
+while player does not guess it
+    ask player for input
+    if player asked for trait (e.g. height)
+        print value (e.g. 175cm)
+    else if player guessed correctly
+        print You guessed correctly
+        end
+</code></pre><p>The game also has a show_all mode where all the traits are shown already and the player only has to guess the item.</p>
+<hr>
+<h2 id="linked-lists">Linked lists</h2>
+<p>I decided to store the values and option names in 2 <strong>linked lists</strong> because they were of variable length. The options are read from a csv file with a header row in this format:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-csv" data-lang="csv"><span style="display:flex;"><span><span style="color:#e6db74">Name</span>,<span style="color:#e6db74">Color</span>,<span style="color:#e6db74">Taste</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">Apple</span>,<span style="color:#e6db74">red</span>,<span style="color:#e6db74">sweet</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">Orange</span>,<span style="color:#e6db74">orange</span>,<span style="color:#e6db74">sour</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">Grape</span>,<span style="color:#e6db74">purple</span>,<span style="color:#e6db74">tart</span>
+</span></span></code></pre></div><hr>
+<h1 id="implementation">Implementation</h1>
+<p>The <strong>node_alloc()</strong> function, returning a pointer to a new node first allocates space for the node itself (2 pointers) and then allocates enough space for the data string to be copied over.</p>
+<p>The <strong>parse_line()</strong> function reads over a line of the file, calling node_alloc for every instance of <strong>sepchar</strong> and at the end. It returns the number of options read.</p>
+<p>The <strong>cleanup()</strong> function frees all the nodes in the linked list for the header and secret row.</p>
+<hr>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> Node {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>data;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span>next;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Function to create a new node
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span><span style="color:#a6e22e">node_alloc</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>data) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Alocate space for node (16 bytes - 8 for char * and 8 for struct Node *)
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span>temp <span style="color:#f92672">=</span> <span style="color:#a6e22e">malloc</span>(<span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">struct</span> Node));
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Set next node to null
+</span></span></span><span style="display:flex;"><span>    temp<span style="color:#f92672">-&gt;</span>next <span style="color:#f92672">=</span> NULL;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Allocate space for text
+</span></span></span><span style="display:flex;"><span>    temp<span style="color:#f92672">-&gt;</span>data <span style="color:#f92672">=</span> <span style="color:#a6e22e">malloc</span>(<span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">char</span>) <span style="color:#f92672">*</span> (<span style="color:#a6e22e">strlen</span>(data) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)); <span style="color:#75715e">// + 1 for null byte at end of string
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Copy text and return pointer to node
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">strcpy</span>(temp<span style="color:#f92672">-&gt;</span>data, data);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> temp;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Function to parse line of csv-style file
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">parse_line</span>(<span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span>head, FILE <span style="color:#f92672">*</span>file, <span style="color:#66d9ef">char</span> sepchar) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Init variables
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> c; <span style="color:#75715e">// Temporary char storage
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> nops <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#75715e">// Number of options - 1 because last option does not end with trailing comma
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#75715e">// Records place in buffer
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> buf[MAXOPL]; <span style="color:#75715e">// Buffer to store text before new node is created
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Set current node to head node for node creation
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span>current <span style="color:#f92672">=</span> head;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Loop over line
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> ((c <span style="color:#f92672">=</span> <span style="color:#a6e22e">getc</span>(file)) <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;\n&#39;</span> <span style="color:#f92672">&amp;&amp;</span> c <span style="color:#f92672">!=</span> EOF) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// If char is delimiter (new option)
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (c <span style="color:#f92672">==</span> sepchar) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// End buffer string with null byte
+</span></span></span><span style="display:flex;"><span>            buf[i] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;\0&#39;</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// Allocate new node for the option
+</span></span></span><span style="display:flex;"><span>            current<span style="color:#f92672">-&gt;</span>next <span style="color:#f92672">=</span> <span style="color:#a6e22e">node_alloc</span>(buf);
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// Set current optin to the new node
+</span></span></span><span style="display:flex;"><span>            current <span style="color:#f92672">=</span> current<span style="color:#f92672">-&gt;</span>next;
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// Go back to the start of the buffer
+</span></span></span><span style="display:flex;"><span>            i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// Increase no. of ops
+</span></span></span><span style="display:flex;"><span>            nops<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// trim spaces before new option
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span>((c <span style="color:#f92672">=</span> <span style="color:#a6e22e">getc</span>(file)) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39; &#39;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">ungetc</span>(c, file);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// Push current char to buffer
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (i <span style="color:#f92672">&lt;</span> MAXOPL <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) { <span style="color:#75715e">// MAXOPL - 1 because null byte is pushed
+</span></span></span><span style="display:flex;"><span>                buf[i<span style="color:#f92672">++</span>] <span style="color:#f92672">=</span> c;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>                buf[MAXOPL <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;\0&#39;</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Length of value exceeds length of buffer. Value truncated at &#39;%s&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, buf);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Push last option with no trailing comma to new node
+</span></span></span><span style="display:flex;"><span>    buf[i] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;\0&#39;</span>;
+</span></span><span style="display:flex;"><span>    current<span style="color:#f92672">-&gt;</span>next <span style="color:#f92672">=</span> <span style="color:#a6e22e">node_alloc</span>(buf);
+</span></span><span style="display:flex;"><span>    current <span style="color:#f92672">=</span> current<span style="color:#f92672">-&gt;</span>next;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Return no. of ops
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> nops;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Function to free all nodes
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">cleanup</span>(<span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span>ops, <span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span>secret) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span>p <span style="color:#f92672">=</span> ops, <span style="color:#f92672">*</span>q; p; p <span style="color:#f92672">=</span> q) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">free</span>(p<span style="color:#f92672">-&gt;</span>data);
+</span></span><span style="display:flex;"><span>        q <span style="color:#f92672">=</span> p<span style="color:#f92672">-&gt;</span>next;
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">free</span>(p);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span>p <span style="color:#f92672">=</span> secret, <span style="color:#f92672">*</span>q; p; p <span style="color:#f92672">=</span> q) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">free</span>(p<span style="color:#f92672">-&gt;</span>data);
+</span></span><span style="display:flex;"><span>        q <span style="color:#f92672">=</span> p<span style="color:#f92672">-&gt;</span>next;
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">free</span>(p);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><hr>
+<h2 id="game-loop">Game loop</h2>
+<p>To choose the secret line, first, the lines are counted, then a random number between 1 and the number of lines - 1 and the <strong>getc()</strong> cursor is moved there.</p>
+<p><strong>display_options()</strong> loops over the options and the values, excludint the 1st one (name) showing only the options if show_all is not selected and showing the option and value if it is selected.</p>
+<p><strong>guess_loop()</strong> repeatedly takes guesses from the player and evaluates them - if <strong>strtol()</strong> succeeds, the player is asking for a trait and if it fails, the player is taking a guess. There are also options for case-sensitive guessing and guessing with limited attempts.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// Function to choose random or set line from file (not header)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// by positioning the cursor
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">choose_line</span>(FILE <span style="color:#f92672">*</span>file, <span style="color:#66d9ef">int</span> setline) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Move cursor to start
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fseek</span>(file, <span style="color:#ae81ff">0</span>, SEEK_SET);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Count lines by counting number of newline chars
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> c;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> lines <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> ((c <span style="color:#f92672">=</span> <span style="color:#a6e22e">getc</span>(file)) <span style="color:#f92672">!=</span> EOF) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (c <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\n&#39;</span>) {
+</span></span><span style="display:flex;"><span>            lines<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Move cursor to start
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fseek</span>(file, <span style="color:#ae81ff">0</span>, SEEK_SET);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// needs at least 2 lines - 1 header and 1 data row
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (lines <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">2</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fprintf</span>(stderr, <span style="color:#e6db74">&#34;Error: file has no data rows</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Choose random value between 0 and lines
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// choose random value, then clamp it between 0 and lines - 1
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// this means the min is 0 and max lines - 2,
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// making the final range is 0 to lines - 1
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// having lines as the max value is unwanted as then it moves the 
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// cursor to the final newline, with no values after
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> rng <span style="color:#f92672">=</span> (<span style="color:#a6e22e">rand</span>() <span style="color:#f92672">%</span> (lines <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// If set line was chosen, use that
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (setline) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (setline <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;&amp;</span> setline <span style="color:#f92672">&lt;</span> lines) {
+</span></span><span style="display:flex;"><span>            rng <span style="color:#f92672">=</span> setline;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Line %d is not in file. Using random line.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, setline);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Move cursor forward by rng lines
+</span></span></span><span style="display:flex;"><span>    lines <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> ((c <span style="color:#f92672">=</span> <span style="color:#a6e22e">getc</span>(file)) <span style="color:#f92672">!=</span> EOF) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (c <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\n&#39;</span>) {
+</span></span><span style="display:flex;"><span>            lines<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (lines <span style="color:#f92672">==</span> rng) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Return line chosen - cursor has been positioned
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> lines;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Function to print the options
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">display_options</span>(<span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span>ops, <span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span>secret, <span style="color:#66d9ef">int</span> show_all) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// For all options and corresponding secrets
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span>p <span style="color:#f92672">=</span> secret<span style="color:#f92672">-&gt;</span>next<span style="color:#f92672">-&gt;</span>next, <span style="color:#f92672">*</span>o <span style="color:#f92672">=</span> ops<span style="color:#f92672">-&gt;</span>next<span style="color:#f92672">-&gt;</span>next; p <span style="color:#f92672">&amp;&amp;</span> o; p <span style="color:#f92672">=</span> p<span style="color:#f92672">-&gt;</span>next, o <span style="color:#f92672">=</span> o<span style="color:#f92672">-&gt;</span>next) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (show_all) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// If show all mode is on, show option: value
+</span></span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;\e[0;93m%s: %s\e[0m</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, o<span style="color:#f92672">-&gt;</span>data, p<span style="color:#f92672">-&gt;</span>data);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// else increment i by 1 and print i. option
+</span></span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;%d. %s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">++</span>i, o<span style="color:#f92672">-&gt;</span>data);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// If show_all then add special option to quit else just type 0 to quit
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (show_all) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;\e[1;91mType &#39;quit&#39; to quit.\e[0m</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;0. quit</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;\e[1;94m=&gt; &#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Function to repeatedly take guesses from the user
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">guess_loop</span>(<span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span>ops, <span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span>secret, <span style="color:#66d9ef">int</span> nops, <span style="color:#66d9ef">int</span> show_all, <span style="color:#66d9ef">int</span> use_case, <span style="color:#66d9ef">int</span> max_attempts) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Set no of attempts and boolean value guessed to 0
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> guessed <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> attempts <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// While not guessed and no. of attempts does not EQUAL max attempts
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// This is because by default, max_attempts is -1 so if no max attempts is set, it will go forever
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>guessed <span style="color:#f92672">&amp;&amp;</span> attempts<span style="color:#f92672">++</span> <span style="color:#f92672">!=</span> max_attempts) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Display options
+</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">display_options</span>(ops, secret, show_all);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Create input buffer for user
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">char</span> input[MAXOPL];
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Read input from stdin
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">fgets</span>(input, MAXOPL, stdin)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        input[<span style="color:#a6e22e">strcspn</span>(input, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;\0&#39;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Color is blue because ansi escape code from display_options still persists so reset it
+</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;\e[0m&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Try to convert input to int
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>end;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">long</span> ask <span style="color:#f92672">=</span> <span style="color:#a6e22e">strtol</span>(input, <span style="color:#f92672">&amp;</span>end, <span style="color:#ae81ff">10</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// If succes, parse as selected option
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">*</span>end <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\0&#39;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>show_all) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// if valid option
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (ask <span style="color:#f92672">&lt;</span> nops <span style="color:#f92672">&amp;&amp;</span> ask <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// set node pointers p and o to the 1st value, because secret and ops are dummy nodes
+</span></span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span>p <span style="color:#f92672">=</span> secret<span style="color:#f92672">-&gt;</span>next;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span>o <span style="color:#f92672">=</span> ops<span style="color:#f92672">-&gt;</span>next;
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// find the next node ask times (find the (ask)th node)
+</span></span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> k <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; k <span style="color:#f92672">&lt;</span> ask; k<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>                    p <span style="color:#f92672">=</span> p<span style="color:#f92672">-&gt;</span>next;
+</span></span><span style="display:flex;"><span>                    o <span style="color:#f92672">=</span> o<span style="color:#f92672">-&gt;</span>next;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// If the user quit, print the answer and exit
+</span></span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (ask <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;\e[0;91m&#34;</span>);
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;answer: %s</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">&#34;</span>, p<span style="color:#f92672">-&gt;</span>data);
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;\e[0m&#34;</span>);
+</span></span><span style="display:flex;"><span>                    guessed <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// Else, print the corresponding value
+</span></span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;\e[0;93m%s: %s\e[0m</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">&#34;</span>, o<span style="color:#f92672">-&gt;</span>data, p<span style="color:#f92672">-&gt;</span>data);
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// if the user entered an invalid option, 
+</span></span></span><span style="display:flex;"><span>                <span style="color:#75715e">// do not count the attempt as a valid attempt
+</span></span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;\e[1;91mInvalid Option\e[0m</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>                attempts<span style="color:#f92672">--</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Else, user must have taken a guess
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// If they chose to quit
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">strcmp</span>(input, <span style="color:#e6db74">&#34;quit&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;\e[0;91m&#34;</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;answer: %s</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">&#34;</span>, secret<span style="color:#f92672">-&gt;</span>next<span style="color:#f92672">-&gt;</span>data);
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;\e[0m&#34;</span>);
+</span></span><span style="display:flex;"><span>                guessed <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// else compare to answer
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> ((use_case <span style="color:#f92672">?</span> <span style="color:#a6e22e">strcmp</span>(input, secret<span style="color:#f92672">-&gt;</span>next<span style="color:#f92672">-&gt;</span>data) <span style="color:#f92672">:</span> <span style="color:#a6e22e">strcasecmp</span>(input, secret<span style="color:#f92672">-&gt;</span>next<span style="color:#f92672">-&gt;</span>data)) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;\e[1;92mCorrect!</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">You guessed it in %d attempts!\e[0m</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, attempts);
+</span></span><span style="display:flex;"><span>                guessed <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;\e[1;91mIncorrect\e[0m</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// if they ran out of attempts
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (attempts <span style="color:#f92672">==</span> max_attempts) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;\e[1;91mYou ran out of attempts\e[0m</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><hr>
+<h2 id="options">Options</h2>
+<p>The options that the program supports include:</p>
+<ul>
+<li>show all fields without being requested</li>
+<li>evaluate guess case-sensitively</li>
+<li>different delimiter (e.g. tab for tsv or semicolon)</li>
+<li>choose selected data row</li>
+<li>limit number of guesses</li>
+<li>choose custom srand seed</li>
+</ul>
+<p>The command line flags are interpreted by the <strong>getopt()</strong> function as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>argv[]) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Create variables for command line flags
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> sepchar <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;,&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> show_all <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, use_case <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, setline <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, seed <span style="color:#f92672">=</span> <span style="color:#a6e22e">time</span>(NULL) <span style="color:#f92672">^</span> <span style="color:#a6e22e">getpid</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> max_attempts <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> opt;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>end <span style="color:#f92672">=</span> NULL;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Parse flags
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> ((opt <span style="color:#f92672">=</span> <span style="color:#a6e22e">getopt</span>(argc, argv, <span style="color:#e6db74">&#34;acd:hl:n:s:&#34;</span>)) <span style="color:#f92672">!=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">switch</span> (opt) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;a&#39;</span><span style="color:#f92672">:</span> show_all <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;c&#39;</span><span style="color:#f92672">:</span> use_case <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;d&#39;</span><span style="color:#f92672">:</span> sepchar <span style="color:#f92672">=</span> optarg[<span style="color:#ae81ff">0</span>]; <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;h&#39;</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">usage</span>(); <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;l&#39;</span><span style="color:#f92672">:</span> setline <span style="color:#f92672">=</span> <span style="color:#a6e22e">strtol</span>(optarg, <span style="color:#f92672">&amp;</span>end, <span style="color:#ae81ff">10</span>); <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;n&#39;</span><span style="color:#f92672">:</span> max_attempts <span style="color:#f92672">=</span> <span style="color:#a6e22e">strtol</span>(optarg, <span style="color:#f92672">&amp;</span>end, <span style="color:#ae81ff">10</span>); <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;s&#39;</span><span style="color:#f92672">:</span> seed <span style="color:#f92672">=</span> <span style="color:#a6e22e">strtol</span>(optarg, <span style="color:#f92672">&amp;</span>end, <span style="color:#ae81ff">10</span>); <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;?&#39;</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">usage</span>(); <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (end <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">*</span>end <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;\0&#39;</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Expected integer but recieved string.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (max_attempts <span style="color:#f92672">&lt;</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Max attempts must be a positive number.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (setline <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Line number must be positive.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">srand</span>(seed);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>filename;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// if there are no non-flag arguments, return 1
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (optind <span style="color:#f92672">&gt;=</span> argc) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;No file input. Please enter the file path of the dataset.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">char</span> input[MAXOPL];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">fgets</span>(input, MAXOPL, stdin)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        input[<span style="color:#a6e22e">strcspn</span>(input, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;\0&#39;</span>;
+</span></span><span style="display:flex;"><span>        filename <span style="color:#f92672">=</span> input;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        filename <span style="color:#f92672">=</span> argv[optind];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// open the first non-flag argument
+</span></span></span><span style="display:flex;"><span>    FILE <span style="color:#f92672">*</span>file <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>(filename, <span style="color:#e6db74">&#34;r&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>file) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">perror</span>(<span style="color:#e6db74">&#34;fopen&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Parse first line for a linked list of header options
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span>ops <span style="color:#f92672">=</span> <span style="color:#a6e22e">node_alloc</span>(<span style="color:#e6db74">&#34;&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> nops <span style="color:#f92672">=</span> <span style="color:#a6e22e">parse_line</span>(ops, file, sepchar);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Choose line from file to be the secret
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> line <span style="color:#f92672">=</span> <span style="color:#a6e22e">choose_line</span>(file, setline);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// parse the secret line
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> Node <span style="color:#f92672">*</span>secret <span style="color:#f92672">=</span> <span style="color:#a6e22e">node_alloc</span>(<span style="color:#e6db74">&#34;&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// if the length of the secret line is not the same as the header line,
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// throw error
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (nops <span style="color:#f92672">!=</span> <span style="color:#a6e22e">parse_line</span>(secret, file, sepchar)) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Malformed line at line %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, line);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">cleanup</span>(ops, secret);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// close file - no longer needed
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fclose</span>(file);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// let user try to guess secret item
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">guess_loop</span>(ops, secret, nops, show_all, use_case, max_attempts);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// free both linked lists
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">cleanup</span>(ops, secret);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Function to show help message
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">usage</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;Usage:</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;  guess [-a] [-c] [-d CHAR] [-h] [-l LINE] [-n MAX] file</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;  -a        show all fields at once</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;  -c        case-sensitive answer matching (default: insensitive)</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;  -d CHAR   field delimiter (default: &#39;,&#39;)</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;  -h        show this help message</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;  -l LINE   use the nth data row after the header instead of a random one</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;  -n MAX    limit number of guesses before revealing the answer</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;  -s SEED   set a set seed for the random number generation</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h1 id="conclusion">Conclusion</h1>
+<p>In conclusion, this program is compatible with almost any csv file and opens a range of possibilities and different use cases.</p>
+
+</content>
+
+
+
+<p>
+  
+</p>
+
+  </main>
+  <footer>Made with <a href="https://github.com/janraasch/hugo-bearblog/">Hugo ʕ•ᴥ•ʔ Bear</a>
+</footer>
+
+  
+</body>
+
+</html>

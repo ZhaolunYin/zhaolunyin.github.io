@@ -10,9 +10,16 @@
 		
 		
 		
-			<lastBuildDate>Sun, 19 Jul 2026 12:29:58 +0100</lastBuildDate>
+			<lastBuildDate>Sun, 19 Jul 2026 14:36:59 +0100</lastBuildDate>
 		
 			<atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Guess - A Universal Guessing Game</title>
+				<link>http://localhost:1313/posts/guess-a-universal-guessing-game/</link>
+				<pubDate>Sun, 19 Jul 2026 14:36:59 +0100</pubDate>
+				<guid>http://localhost:1313/posts/guess-a-universal-guessing-game/</guid>
+				<description>&lt;h1 id=&#34;guess---a-universal-guessing-game&#34;&gt;Guess - A Universal Guessing Game&lt;/h1&gt;&#xA;&lt;p&gt;The program &lt;a href=&#34;https://github.com/ZhaolunYin/guess&#34;&gt;&lt;strong&gt;Guess&lt;/strong&gt;&lt;/a&gt; implements a variation of &lt;a href=&#34;https://en.wikipedia.org/wiki/Guess_Who%3F&#34;&gt;&lt;strong&gt;Guess Who&lt;/strong&gt;&lt;/a&gt;. The game goes like this:&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-pseudocode&#34; data-lang=&#34;pseudocode&#34;&gt;CPU selects random item in category&#xA;while player does not guess it&#xA;    ask player for input&#xA;    if player asked for trait (e.g. height)&#xA;        print value (e.g. 175cm)&#xA;    else if player guessed correctly&#xA;        print You guessed correctly&#xA;        end&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The game also has a show_all mode where all the traits are shown already and the player only has to guess the item.&lt;/p&gt;</description>
+			</item>
 			<item>
 				<title>RCPL: A C REPL</title>
 				<link>http://localhost:1313/posts/rcpl-a-c-repl/</link>
