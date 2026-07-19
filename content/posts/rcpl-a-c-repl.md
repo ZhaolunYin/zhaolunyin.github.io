@@ -1,9 +1,9 @@
 +++
 date = '2026-07-19T12:29:58+01:00'
 draft = false
-title = 'RCPL: A C Repl'
+title = 'RCPL: A C REPL'
 +++
-# RCPL: A C repl
+# RCPL: A C REPL
 ---
 While tools like [Cling](https://github.com/root-project/cling) exist that implement the Read Eval Print Loop concept, they generally tend to re-invent the wheel by actually *interpreting* the C code. This is why I made [RCPL](https://github.com/ZhaolunYin/rcpl) - Read ***Compile*** Print Loop. Instead of interpreting the C code, RCPL pushes the code to a buffer and then calls *gcc* or *clang* to compile the code.
 
