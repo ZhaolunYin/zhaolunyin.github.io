@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RCPL: A C Repl | Zhaolun&#39;s Blog</title>
+<meta name="title" content="RCPL: A C Repl" />
+<meta name="description" content="RCPL: A C repl
+
+While tools like Cling exist that implement the Read Eval Print Loop concept, they generally tend to re-invent the wheel by actually interpreting the C code. This is why I made RCPL - Read Compile Print Loop. Instead of interpreting the C code, RCPL pushes the code to a buffer and then calls gcc or clang to compile the code.
+$ ./rcpl
+&gt;&gt;&gt; printf(&#34;Hello, world!\n&#34;);
+Hello, world!
+&gt;&gt;&gt; int i = 123;
+&gt;&gt;&gt; printf(&#34;i is %d\n&#34;, i);
+i is 123
+&gt;&gt;&gt; print(hi);
+.buf_41318.c: In function ‘main’:
+.buf_41318.c:16:9: error: implicit declaration of function ‘print’; did you mean ‘printf’? [-Wimplicit-function-declaration]
+   16 |         print(hi);
+      |         ^~~~~
+      |         printf
+.buf_41318.c:16:15: error: ‘hi’ undeclared (first use in this function); did you mean ‘i’?
+   16 |         print(hi);
+      |               ^~
+      |               i
+.buf_41318.c:16:15: note: each undeclared identifier is reported only once for each function it appears in
+&gt;&gt;&gt;
+$ 
+
+Buffer
+To store the user&rsquo;s input, the obvious solution is to use a file. However, this can be affected by other programs so it is safer to use a character array stored in the memory. The following function concatentates a second string onto the first string." />
+<meta name="keywords" content="" />
+
+
+<meta property="og:url" content="http://localhost:1313/posts/rcpl-a-c-repl/">
+	<meta property="og:site_name" content="Zhaolun&#39;s Blog">
+	<meta property="og:title" content="RCPL: A C Repl">
+	<meta property="og:description" content="RCPL: A C repl While tools like Cling exist that implement the Read Eval Print Loop concept, they generally tend to re-invent the wheel by actually interpreting the C code. This is why I made RCPL - Read Compile Print Loop. Instead of interpreting the C code, RCPL pushes the code to a buffer and then calls gcc or clang to compile the code.
+$ ./rcpl &gt;&gt;&gt; printf(&#34;Hello, world!\n&#34;); Hello, world! &gt;&gt;&gt; int i = 123; &gt;&gt;&gt; printf(&#34;i is %d\n&#34;, i); i is 123 &gt;&gt;&gt; print(hi); .buf_41318.c: In function ‘main’: .buf_41318.c:16:9: error: implicit declaration of function ‘print’; did you mean ‘printf’? [-Wimplicit-function-declaration] 16 | print(hi); | ^~~~~ | printf .buf_41318.c:16:15: error: ‘hi’ undeclared (first use in this function); did you mean ‘i’? 16 | print(hi); | ^~ | i .buf_41318.c:16:15: note: each undeclared identifier is reported only once for each function it appears in &gt;&gt;&gt; $ Buffer To store the user’s input, the obvious solution is to use a file. However, this can be affected by other programs so it is safer to use a character array stored in the memory. The following function concatentates a second string onto the first string.">
+	<meta property="og:locale" content="en_us">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-07-19T12:29:58+01:00">
+		<meta property="article:modified_time" content="2026-07-19T12:29:58+01:00">
+
+
+
+
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="RCPL: A C Repl">
+	<meta name="twitter:description" content="RCPL: A C repl While tools like Cling exist that implement the Read Eval Print Loop concept, they generally tend to re-invent the wheel by actually interpreting the C code. This is why I made RCPL - Read Compile Print Loop. Instead of interpreting the C code, RCPL pushes the code to a buffer and then calls gcc or clang to compile the code.
+$ ./rcpl &gt;&gt;&gt; printf(&#34;Hello, world!\n&#34;); Hello, world! &gt;&gt;&gt; int i = 123; &gt;&gt;&gt; printf(&#34;i is %d\n&#34;, i); i is 123 &gt;&gt;&gt; print(hi); .buf_41318.c: In function ‘main’: .buf_41318.c:16:9: error: implicit declaration of function ‘print’; did you mean ‘printf’? [-Wimplicit-function-declaration] 16 | print(hi); | ^~~~~ | printf .buf_41318.c:16:15: error: ‘hi’ undeclared (first use in this function); did you mean ‘i’? 16 | print(hi); | ^~ | i .buf_41318.c:16:15: note: each undeclared identifier is reported only once for each function it appears in &gt;&gt;&gt; $ Buffer To store the user’s input, the obvious solution is to use a file. However, this can be affected by other programs so it is safer to use a character array stored in the memory. The following function concatentates a second string onto the first string.">
+
+
+
+
+	<meta itemprop="name" content="RCPL: A C Repl">
+	<meta itemprop="description" content="RCPL: A C repl While tools like Cling exist that implement the Read Eval Print Loop concept, they generally tend to re-invent the wheel by actually interpreting the C code. This is why I made RCPL - Read Compile Print Loop. Instead of interpreting the C code, RCPL pushes the code to a buffer and then calls gcc or clang to compile the code.
+$ ./rcpl &gt;&gt;&gt; printf(&#34;Hello, world!\n&#34;); Hello, world! &gt;&gt;&gt; int i = 123; &gt;&gt;&gt; printf(&#34;i is %d\n&#34;, i); i is 123 &gt;&gt;&gt; print(hi); .buf_41318.c: In function ‘main’: .buf_41318.c:16:9: error: implicit declaration of function ‘print’; did you mean ‘printf’? [-Wimplicit-function-declaration] 16 | print(hi); | ^~~~~ | printf .buf_41318.c:16:15: error: ‘hi’ undeclared (first use in this function); did you mean ‘i’? 16 | print(hi); | ^~ | i .buf_41318.c:16:15: note: each undeclared identifier is reported only once for each function it appears in &gt;&gt;&gt; $ Buffer To store the user’s input, the obvious solution is to use a file. However, this can be affected by other programs so it is safer to use a character array stored in the memory. The following function concatentates a second string onto the first string.">
+	<meta itemprop="datePublished" content="2026-07-19T12:29:58+01:00">
+	<meta itemprop="dateModified" content="2026-07-19T12:29:58+01:00">
+	<meta itemprop="wordCount" content="1197">
+<meta name="referrer" content="no-referrer-when-downgrade" />
+
+  <style>
+  :root {
+    --width: 720px;
+    --font-main: Verdana, sans-serif;
+    --font-secondary: Verdana, sans-serif;
+    --font-scale: 1em;
+    --background-color: #fff;
+    --heading-color: #222;
+    --text-color: #444;
+    --link-color: #3273dc;
+    --visited-color: #8b6fcb;
+    --blockquote-color: #222;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background-color: #01242e;
+      --heading-color: #eee;
+      --text-color: #ddd;
+      --link-color: #8cc2dd;
+      --visited-color: #8b6fcb;
+      --blockquote-color: #ccc;
+    }
+  }
+
+  body {
+    font-family: var(--font-secondary);
+    font-size: var(--font-scale);
+    margin: auto;
+    padding: 20px;
+    max-width: var(--width);
+    text-align: left;
+    background-color: var(--background-color);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.5;
+    color: var(--text-color);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-main);
+    color: var(--heading-color);
+  }
+
+  a {
+    color: var(--link-color);
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  nav a {
+    margin-right: 8px;
+  }
+
+  strong,
+  b {
+    color: var(--heading-color);
+  }
+
+  button {
+    margin: 0;
+    cursor: pointer;
+  }
+
+  time {
+    font-family: monospace;
+    font-style: normal;
+    font-size: 15px;
+  }
+
+  main {
+    line-height: 1.6;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px dashed;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  code {
+    font-family: monospace;
+    padding: 2px;
+    border-radius: 3px;
+  }
+
+  blockquote {
+    border-left: 1px solid #999;
+    color: var(--blockquote-color);
+    padding-left: 20px;
+    font-style: italic;
+  }
+
+  footer {
+    padding: 25px 0;
+    text-align: center;
+  }
+
+  .title:hover {
+    text-decoration: none;
+  }
+
+  .title h1 {
+    font-size: 1.5em;
+  }
+
+  .inline {
+    width: auto !important;
+  }
+
+  .highlight,
+  .code {
+    border-radius: 3px;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    overflow-x: auto;
+  }
+
+  .highlight pre,
+  .code pre {
+    min-width: 100%;
+    width: max-content;
+  }
+
+   
+  ul.blog-posts {
+    list-style-type: none;
+    padding: unset;
+  }
+
+  ul.blog-posts li {
+    display: flex;
+  }
+
+  ul.blog-posts li span {
+    flex: 0 0 130px;
+  }
+
+  ul.blog-posts li a:visited {
+    color: var(--visited-color);
+  }
+
+</style>
+
+</head>
+
+<body>
+  <header><a href="/" class="title">
+  <h2>Zhaolun&#39;s Blog</h2>
+</a>
+<nav>
+</nav>
+</header>
+  <main>
+
+<content>
+  <h1 id="rcpl-a-c-repl">RCPL: A C repl</h1>
+<hr>
+<p>While tools like <a href="https://github.com/root-project/cling">Cling</a> exist that implement the Read Eval Print Loop concept, they generally tend to re-invent the wheel by actually <em>interpreting</em> the C code. This is why I made <a href="https://github.com/ZhaolunYin/rcpl">RCPL</a> - Read <em><strong>Compile</strong></em> Print Loop. Instead of interpreting the C code, RCPL pushes the code to a buffer and then calls <em>gcc</em> or <em>clang</em> to compile the code.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ ./rcpl
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Hello, world!\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>Hello, world!
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; int i <span style="color:#f92672">=</span> 123;
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;i is %d\n&#34;</span>, i<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>i is <span style="color:#ae81ff">123</span>
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; print<span style="color:#f92672">(</span>hi<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>.buf_41318.c: In <span style="color:#66d9ef">function</span> ‘main’:
+</span></span><span style="display:flex;"><span>.buf_41318.c:16:9: error: implicit declaration of <span style="color:#66d9ef">function</span> ‘print’; did you mean ‘printf’? <span style="color:#f92672">[</span>-Wimplicit-function-declaration<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">16</span> |         print<span style="color:#f92672">(</span>hi<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>      |         ^~~~~
+</span></span><span style="display:flex;"><span>      |         printf
+</span></span><span style="display:flex;"><span>.buf_41318.c:16:15: error: ‘hi’ undeclared <span style="color:#f92672">(</span>first use in this <span style="color:#66d9ef">function</span><span style="color:#f92672">)</span>; did you mean ‘i’?
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">16</span> |         print<span style="color:#f92672">(</span>hi<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>      |               ^~
+</span></span><span style="display:flex;"><span>      |               i
+</span></span><span style="display:flex;"><span>.buf_41318.c:16:15: note: each undeclared identifier is reported only once <span style="color:#66d9ef">for</span> each <span style="color:#66d9ef">function</span> it appears in
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt;
+</span></span><span style="display:flex;"><span>$ 
+</span></span></code></pre></div><hr>
+<h2 id="buffer">Buffer</h2>
+<p>To store the user&rsquo;s input, the obvious solution is to use a <strong>file</strong>. However, this can be affected by other programs so it is safer to use a character array stored in the memory. The following function concatentates a second string onto the first string.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// Function similar to fputs except for char *
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">buf_add</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>buffer, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>add) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Allocate memory for buffer + new + null byte
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">size_t</span> buf_len <span style="color:#f92672">=</span> <span style="color:#a6e22e">strlen</span>(<span style="color:#f92672">*</span>buffer);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">size_t</span> add_len <span style="color:#f92672">=</span> <span style="color:#a6e22e">strlen</span>(add);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>tmp <span style="color:#f92672">=</span> <span style="color:#a6e22e">realloc</span>(<span style="color:#f92672">*</span>buffer, (buf_len <span style="color:#f92672">+</span> add_len <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">char</span>));
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>tmp) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">perror</span>(<span style="color:#e6db74">&#34;realloc&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">*</span>buffer <span style="color:#f92672">=</span> tmp;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Copy add onto buffer
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">memcpy</span>(<span style="color:#f92672">*</span>buffer <span style="color:#f92672">+</span> (buf_len <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">char</span>)), add, add_len <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>); 
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The initial buffer has the basic C program structure along with a part which redirects <em>stdout</em> to <em>/dev/null</em>. This is because just before compilation, <em>stdout</em> is <em>restored</em>, so only what was printed by the <em>most recent</em> line of code shows.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// Setup function
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">setup</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// make buffer empty heap string 
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>buffer <span style="color:#f92672">=</span> <span style="color:#a6e22e">malloc</span>(<span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">char</span>));
+</span></span><span style="display:flex;"><span>    buffer[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;\0&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// add starting file, redirects stdout to /dev/null
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">buf_add</span>(<span style="color:#f92672">&amp;</span>buffer, 
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;#include &lt;stdio.h&gt;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;#include &lt;stdlib.h&gt;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;#include &lt;fcntl.h&gt;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;#include &lt;unistd.h&gt;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;int main() {</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">int _STDOUT, _DEVNULL;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">fflush(stdout);</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">_STDOUT = dup(1);</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">_DEVNULL = open(</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">/dev/null</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">, O_WRONLY);</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">dup2(_DEVNULL, 1);</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">close(_DEVNULL);</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            );
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> buffer;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><hr>
+<h2 id="compile-and-run">Compile and Run</h2>
+<p>To compile and run, the program first copies the current buffer into a <em>new</em> character array in order to easily discard changes later. Then, it restores <em>stdout</em> and pushes the new line of text onto the buffer. Then, it adds the final curly brace to close the main function. The program then prints the whole buffer into a file, forks a <strong>C compiler</strong> with speed-focused flags to compile it, and runs the program. The files are then deleted and if compilation <em>and</em> run were both successful, pushes the line onto the main buffer.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">run</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>buffer, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>cfile, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>xfile, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>text) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Copy bufffer into temporary compile buffer
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>comp_buf <span style="color:#f92672">=</span> <span style="color:#a6e22e">malloc</span>(<span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">char</span>) <span style="color:#f92672">*</span> (<span style="color:#a6e22e">strlen</span>(<span style="color:#f92672">*</span>buffer) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>));
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>comp_buf) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">perror</span>(<span style="color:#e6db74">&#34;malloc&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">strcpy</span>(comp_buf, <span style="color:#f92672">*</span>buffer);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Enable stdout and add newline + tab
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">buf_add</span>(<span style="color:#f92672">&amp;</span>comp_buf, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">fflush(stdout); dup2(_STDOUT, 1); close(_STDOUT);</span><span style="color:#ae81ff">\n\t</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// add line
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">buf_add</span>(<span style="color:#f92672">&amp;</span>comp_buf, text);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Add newline and curly brace so it can compile
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">buf_add</span>(<span style="color:#f92672">&amp;</span>comp_buf, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Output comp_buf to a file for compilation
+</span></span></span><span style="display:flex;"><span>    FILE <span style="color:#f92672">*</span>compile <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>(cfile, <span style="color:#e6db74">&#34;w&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>compile) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">perror</span>(<span style="color:#e6db74">&#34;fopen&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">free</span>(comp_buf);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>; 
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fprintf</span>(compile, <span style="color:#e6db74">&#34;%s&#34;</span>, comp_buf);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fclose</span>(compile);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Compile
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pid_t</span> pid <span style="color:#f92672">=</span> <span style="color:#a6e22e">fork</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (pid <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#if defined(__clang__)
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>compiler <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;clang&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#elif defined(__GNUC__)
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>compiler <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;gcc&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#else
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>compiler <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;cc&#34;</span>;  <span style="color:#75715e">// unknown compiler, fall back to cc
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#endif
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>args[] <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>            compiler,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;-O0&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;-w&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;-fno-asynchronous-unwind-tables&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;-fno-ident&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;-pipe&#34;</span>,
+</span></span><span style="display:flex;"><span>            cfile,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;-o&#34;</span>,
+</span></span><span style="display:flex;"><span>            xfile,
+</span></span><span style="display:flex;"><span>            NULL
+</span></span><span style="display:flex;"><span>        };
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">execvp</span>(compiler, args);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">perror</span>(<span style="color:#e6db74">&#34;execvp&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (pid <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">perror</span>(<span style="color:#e6db74">&#34;fork&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">free</span>(comp_buf);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// wait for compilation to finish
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> status;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">waitpid</span>(pid, <span style="color:#f92672">&amp;</span>status, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Run
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">WIFEXITED</span>(status) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">WEXITSTATUS</span>(status) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>        pid <span style="color:#f92672">=</span> <span style="color:#a6e22e">fork</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (pid <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">char</span> path[<span style="color:#ae81ff">512</span>];
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">snprintf</span>(path, <span style="color:#66d9ef">sizeof</span>(path), <span style="color:#e6db74">&#34;./%s&#34;</span>, xfile);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>args[] <span style="color:#f92672">=</span> { path , NULL };
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">execvp</span>(path, args);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">perror</span>(<span style="color:#e6db74">&#34;execvp&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">waitpid</span>(pid, <span style="color:#f92672">&amp;</span>status, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Delete created files and free comp_buf
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">unlink</span>(cfile);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">unlink</span>(xfile);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">free</span>(comp_buf);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Re-insert line without compile necessary stuff if compile was successful
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">WIFEXITED</span>(status) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">WEXITSTATUS</span>(status) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">buf_add</span>(buffer, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">buf_add</span>(buffer, text);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">buf_add</span>(buffer, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// If compileed without interrupt, return exit code else return -1
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">WIFEXITED</span>(status) <span style="color:#f92672">?</span> <span style="color:#a6e22e">WEXITSTATUS</span>(status) <span style="color:#f92672">:</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><hr>
+<h2 id="loop">Loop</h2>
+<p>The following main function handles <strong>input</strong>, <strong>nesting</strong> and a few <strong>commands</strong>. It creates process-independent filenames so concurrent processes do not clobber each other&rsquo;s files. The nesting function is quite simplistic and does not account for a lot of things (e.g. escaped quotes).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// Function to calculate curly brace nesting level
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">nest_depth</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>text) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> depth <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> quote1 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, quote2 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; text[i] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;\0&#39;</span>; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> c <span style="color:#f92672">=</span> text[i];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (c <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\&#39;&#39;</span>) {
+</span></span><span style="display:flex;"><span>            quote1 <span style="color:#f92672">=</span> <span style="color:#f92672">!</span>quote1;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (c <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\&#34;&#39;</span>) {
+</span></span><span style="display:flex;"><span>            quote2 <span style="color:#f92672">=</span> <span style="color:#f92672">!</span>quote2;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (c <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;{&#39;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>quote1 <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>quote2) {
+</span></span><span style="display:flex;"><span>            depth<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (c <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;}&#39;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>quote1 <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>quote2) {
+</span></span><span style="display:flex;"><span>            depth<span style="color:#f92672">--</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> depth;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Function to parse commands
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">command</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>command, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>buffer, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>nest_buf) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// If exit command was run, free buffers and exit
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">strcmp</span>(command, <span style="color:#e6db74">&#34;:exit&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">free</span>(command);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">free</span>(buffer);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">free</span>(nest_buf);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// If file command was run, print file
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">strcmp</span>(command, <span style="color:#e6db74">&#34;:file&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;%s%s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, buffer, nest_buf);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// If no command was run, return 0 (false)
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Else return 1 (true)
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Setup
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>buffer <span style="color:#f92672">=</span> <span style="color:#a6e22e">setup</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>buffer) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Create cfile and xfile names unique to process
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> cfile[<span style="color:#ae81ff">64</span>], xfile[<span style="color:#ae81ff">64</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">snprintf</span>(cfile, <span style="color:#66d9ef">sizeof</span>(cfile), <span style="color:#e6db74">&#34;.buf_%d.c&#34;</span>, <span style="color:#a6e22e">getpid</span>());
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">snprintf</span>(xfile, <span style="color:#66d9ef">sizeof</span>(xfile), <span style="color:#e6db74">&#34;.run_%d&#34;</span>, <span style="color:#a6e22e">getpid</span>());
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> nesting <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Create empty string nest_buf for storage of nested parts without compilation
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>nest_buf <span style="color:#f92672">=</span> <span style="color:#a6e22e">malloc</span>(<span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">char</span>));
+</span></span><span style="display:flex;"><span>    nest_buf[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;\0&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (<span style="color:#ae81ff">1</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Read line from stdin
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>line <span style="color:#f92672">=</span> NULL;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">size_t</span> size <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;&gt;&gt;&gt; &#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fflush</span>(stdout);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">ssize_t</span> nread <span style="color:#f92672">=</span> <span style="color:#a6e22e">getline</span>(<span style="color:#f92672">&amp;</span>line, <span style="color:#f92672">&amp;</span>size, stdin);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (nread <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">free</span>(line);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (nread <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;&amp;</span> line[nread <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\n&#39;</span>) {
+</span></span><span style="display:flex;"><span>            line[nread <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;\0&#39;</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">command</span>(line, buffer, nest_buf)) {}
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// If user typed exit(n); or return n; then exit.
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">strstr</span>(line, <span style="color:#e6db74">&#34;exit(&#34;</span>) <span style="color:#f92672">==</span> line  <span style="color:#f92672">||</span> <span style="color:#a6e22e">strstr</span>(line, <span style="color:#e6db74">&#34;return &#34;</span>) <span style="color:#f92672">==</span> line) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">free</span>(buffer);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">free</span>(nest_buf);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">free</span>(line);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// if not nesting, run line
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">nest_depth</span>(buffer) <span style="color:#f92672">+</span> <span style="color:#a6e22e">nest_depth</span>(nest_buf) <span style="color:#f92672">+</span> <span style="color:#a6e22e">nest_depth</span>(line) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>nesting) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">run</span>(<span style="color:#f92672">&amp;</span>buffer, cfile, xfile, line);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// else if finished nesting run nested part
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">nest_depth</span>(buffer) <span style="color:#f92672">+</span> <span style="color:#a6e22e">nest_depth</span>(nest_buf) <span style="color:#f92672">+</span> <span style="color:#a6e22e">nest_depth</span>(line) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">&amp;&amp;</span> nesting) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">buf_add</span>(<span style="color:#f92672">&amp;</span>nest_buf, line);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">buf_add</span>(<span style="color:#f92672">&amp;</span>nest_buf, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>            nesting <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">run</span>(<span style="color:#f92672">&amp;</span>buffer, cfile, xfile, nest_buf);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">free</span>(nest_buf);
+</span></span><span style="display:flex;"><span>            nest_buf <span style="color:#f92672">=</span> <span style="color:#a6e22e">malloc</span>(<span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">char</span>));
+</span></span><span style="display:flex;"><span>            nest_buf[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;\0&#39;</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// if there are more &#39;}&#39; than &#39;{&#39;
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">nest_depth</span>(buffer) <span style="color:#f92672">+</span> <span style="color:#a6e22e">nest_depth</span>(nest_buf) <span style="color:#f92672">+</span> <span style="color:#a6e22e">nest_depth</span>(line) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">free</span>(nest_buf);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">free</span>(buffer);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Error: unexpected </span><span style="color:#ae81ff">\&#39;</span><span style="color:#e6db74">}</span><span style="color:#ae81ff">\&#39;\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// else add to nest buf
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            nesting <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">buf_add</span>(<span style="color:#f92672">&amp;</span>nest_buf, line);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">buf_add</span>(<span style="color:#f92672">&amp;</span>nest_buf, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// free line
+</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">free</span>(line);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">free</span>(nest_buf);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">free</span>(buffer);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h1 id="conclusion">Conclusion</h1>
+<p>In conclusion, although tools such as <strong>Cling</strong> are much more advanced and powerful, a simple tool such as this can suffice for occasional testing purposes.</p>
+
+</content>
+
+
+
+<p>
+  
+</p>
+
+  </main>
+  <footer>Made with <a href="https://github.com/janraasch/hugo-bearblog/">Hugo ʕ•ᴥ•ʔ Bear</a>
+</footer>
+
+  
+</body>
+
+</html>
