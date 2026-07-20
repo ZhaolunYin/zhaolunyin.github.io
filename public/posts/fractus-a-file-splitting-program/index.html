@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fractus - A File Splitting Program | Zhaolun&#39;s Blog</title>
+<meta name="title" content="Fractus - A File Splitting Program" />
+<meta name="description" content="Fractus - A File Splitting Program
+Fractus is a program that splits a secret file into 15 files, requiring all 15 files to reconstruct the original. It does this by first hex encoding the filename and each character in the file, then generating 15 different files where no hex character in the same place as the original file or any other of the 15 files is the same. This way, the original file can be found by looking at the missing hex char from each file." />
+<meta name="keywords" content="" />
+
+
+<meta property="og:url" content="http://localhost:1313/posts/fractus-a-file-splitting-program/">
+	<meta property="og:site_name" content="Zhaolun&#39;s Blog">
+	<meta property="og:title" content="Fractus - A File Splitting Program">
+	<meta property="og:description" content="Fractus - A File Splitting Program Fractus is a program that splits a secret file into 15 files, requiring all 15 files to reconstruct the original. It does this by first hex encoding the filename and each character in the file, then generating 15 different files where no hex character in the same place as the original file or any other of the 15 files is the same. This way, the original file can be found by looking at the missing hex char from each file.">
+	<meta property="og:locale" content="en_us">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-07-20T13:28:42+01:00">
+		<meta property="article:modified_time" content="2026-07-20T13:28:42+01:00">
+
+
+
+
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Fractus - A File Splitting Program">
+	<meta name="twitter:description" content="Fractus - A File Splitting Program Fractus is a program that splits a secret file into 15 files, requiring all 15 files to reconstruct the original. It does this by first hex encoding the filename and each character in the file, then generating 15 different files where no hex character in the same place as the original file or any other of the 15 files is the same. This way, the original file can be found by looking at the missing hex char from each file.">
+
+
+
+
+	<meta itemprop="name" content="Fractus - A File Splitting Program">
+	<meta itemprop="description" content="Fractus - A File Splitting Program Fractus is a program that splits a secret file into 15 files, requiring all 15 files to reconstruct the original. It does this by first hex encoding the filename and each character in the file, then generating 15 different files where no hex character in the same place as the original file or any other of the 15 files is the same. This way, the original file can be found by looking at the missing hex char from each file.">
+	<meta itemprop="datePublished" content="2026-07-20T13:28:42+01:00">
+	<meta itemprop="dateModified" content="2026-07-20T13:28:42+01:00">
+	<meta itemprop="wordCount" content="2131">
+<meta name="referrer" content="no-referrer-when-downgrade" />
+
+  <style>
+  :root {
+    --width: 720px;
+    --font-main: Verdana, sans-serif;
+    --font-secondary: Verdana, sans-serif;
+    --font-scale: 1em;
+    --background-color: #fff;
+    --heading-color: #222;
+    --text-color: #444;
+    --link-color: #3273dc;
+    --visited-color: #8b6fcb;
+    --blockquote-color: #222;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background-color: #01242e;
+      --heading-color: #eee;
+      --text-color: #ddd;
+      --link-color: #8cc2dd;
+      --visited-color: #8b6fcb;
+      --blockquote-color: #ccc;
+    }
+  }
+
+  body {
+    font-family: var(--font-secondary);
+    font-size: var(--font-scale);
+    margin: auto;
+    padding: 20px;
+    max-width: var(--width);
+    text-align: left;
+    background-color: var(--background-color);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.5;
+    color: var(--text-color);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-main);
+    color: var(--heading-color);
+  }
+
+  a {
+    color: var(--link-color);
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  nav a {
+    margin-right: 8px;
+  }
+
+  strong,
+  b {
+    color: var(--heading-color);
+  }
+
+  button {
+    margin: 0;
+    cursor: pointer;
+  }
+
+  time {
+    font-family: monospace;
+    font-style: normal;
+    font-size: 15px;
+  }
+
+  main {
+    line-height: 1.6;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px dashed;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  code {
+    font-family: monospace;
+    padding: 2px;
+    border-radius: 3px;
+  }
+
+  blockquote {
+    border-left: 1px solid #999;
+    color: var(--blockquote-color);
+    padding-left: 20px;
+    font-style: italic;
+  }
+
+  footer {
+    padding: 25px 0;
+    text-align: center;
+  }
+
+  .title:hover {
+    text-decoration: none;
+  }
+
+  .title h1 {
+    font-size: 1.5em;
+  }
+
+  .inline {
+    width: auto !important;
+  }
+
+  .highlight,
+  .code {
+    border-radius: 3px;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    overflow-x: auto;
+  }
+
+  .highlight pre,
+  .code pre {
+    min-width: 100%;
+    width: max-content;
+  }
+
+   
+  ul.blog-posts {
+    list-style-type: none;
+    padding: unset;
+  }
+
+  ul.blog-posts li {
+    display: flex;
+  }
+
+  ul.blog-posts li span {
+    flex: 0 0 130px;
+  }
+
+  ul.blog-posts li a:visited {
+    color: var(--visited-color);
+  }
+
+</style>
+
+</head>
+
+<body>
+  <header><a href="/" class="title">
+  <h2>Zhaolun&#39;s Blog</h2>
+</a>
+<nav>
+</nav>
+</header>
+  <main>
+
+<content>
+  <h1 id="fractus---a-file-splitting-program">Fractus - A File Splitting Program</h1>
+<p><a href="https://github.com/ZhaolunYin/fractus">Fractus</a> is a program that splits a <em>secret file</em> into 15 files, requiring <strong>all 15 files</strong> to reconstruct the original. It does this by first hex encoding the <strong>filename</strong> and <strong>each character</strong> in the file, then generating 15 different files where no hex character in the <em>same place</em> as the original file or any other of the 15 files is the <em>same</em>. This way, the original file can be found by looking at the <em>missing hex char</em> from each file.</p>
+<hr>
+<h2 id="example">Example</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>hello.txt
+</span></span><span style="display:flex;"><span>Hello, world
+</span></span></code></pre></div><p>After it is hex encoded, it becomes:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>68 65 6C 6C 6F 2E 74 78 74
+</span></span><span style="display:flex;"><span>48 65 6C 6C 6F 2C 20 77 6F 72 6C 64
+</span></span></code></pre></div><p>Then, the 15 files created would be</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>unum.fractus
+</span></span><span style="display:flex;"><span>2C 23 88 13 45 47 29 F0 6B
+</span></span><span style="display:flex;"><span>AB 20 D3 24 78 8D 0A 80 84 CE 7B D6
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>duo.fractus
+</span></span><span style="display:flex;"><span>EA 39 FF 2E E2 B9 16 AE 91
+</span></span><span style="display:flex;"><span>0E CC 44 7F 87 C7 15 B5 57 EC C4 25
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tres.fractus
+</span></span><span style="display:flex;"><span>91 87 D2 F7 06 EA 45 DF 2E
+</span></span><span style="display:flex;"><span>3D 79 F2 D6 CB 11 A7 2F E3 31 F3 C8
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>quattuor.fractus
+</span></span><span style="display:flex;"><span>14 B0 B4 EF 8E 1D C2 4A E2
+</span></span><span style="display:flex;"><span>25 AD 88 B5 B3 EF 9D F8 3A 57 1A AC
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>quique.fractus
+</span></span><span style="display:flex;"><span>7F 76 A1 9B 3B 53 FB 25 F3
+</span></span><span style="display:flex;"><span>86 0A A9 4E 95 A5 F4 DC 1E BD A2 1A
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sex.fractus
+</span></span><span style="display:flex;"><span>4E 92 CB 01 FD 84 BA EC 38
+</span></span><span style="display:flex;"><span>C2 51 EB AB 26 D2 42 42 C1 8A B9 0D
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>septem.fractus
+</span></span><span style="display:flex;"><span>C9 EA ED B0 93 C2 DE 33 C7
+</span></span><span style="display:flex;"><span>F3 16 70 E1 EE 3A 3E C6 75 A0 0F 9F
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>octo.fractus
+</span></span><span style="display:flex;"><span>83 D1 3E 85 DC 6F 67 57 AA
+</span></span><span style="display:flex;"><span>BF 38 26 59 40 5E E8 93 0B 2B 45 30
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>novem.fractus
+</span></span><span style="display:flex;"><span>5D 1F 07 A9 51 90 E3 84 8F
+</span></span><span style="display:flex;"><span>90 E7 1E 82 0D 0B C1 61 D8 63 3E 49
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>decem.fractus
+</span></span><span style="display:flex;"><span>A7 4D 45 5D B9 05 0C BD 10
+</span></span><span style="display:flex;"><span>DC 8F C1 08 51 B3 BB 19 2D 19 9D 7B
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>undecim.fractus
+</span></span><span style="display:flex;"><span>02 C4 5A D6 2A D6 9D 09 B6
+</span></span><span style="display:flex;"><span>EA B3 97 CD D4 F4 63 3D 46 0F 88 5E
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>duodecim.fractus
+</span></span><span style="display:flex;"><span>D6 58 76 42 74 F8 38 62 05
+</span></span><span style="display:flex;"><span>57 4E 0A 3A F2 49 79 04 90 48 E6 E2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tredecim.fractus
+</span></span><span style="display:flex;"><span>B0 FC 10 38 10 AC 50 CB 5C
+</span></span><span style="display:flex;"><span>19 D4 B5 F3 1A 96 8F 5B AC 94 D0 B1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>quattuordecim.fractus
+</span></span><span style="display:flex;"><span>35 0E 23 C4 A7 71 AF 16 D9
+</span></span><span style="display:flex;"><span>71 FB 5D 10 AC 78 56 AE B2 F6 27 83
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>quindecim.fractus
+</span></span><span style="display:flex;"><span>FB AB 99 7A C8 3B 81 91 4D
+</span></span><span style="display:flex;"><span>64 92 3F 97 39 60 DC EA F9 D5 51 F7
+</span></span></code></pre></div><p>In this way, the original digit is <em>missing</em> from all the files, so it can be recreated once you posess all the fractus files.</p>
+<hr>
+<h1 id="hex-encodedecode">Hex encode/decode</h1>
+<p>These 2 basic functions convert a single digit of hex to decimal and back.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// Convert int (0-15) to hex digit
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">char</span> <span style="color:#a6e22e">int_to_hex</span>(<span style="color:#66d9ef">int</span> i) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (i <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;&amp;</span> i <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">9</span>) <span style="color:#75715e">// if 0-9 then return 0-9
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;0&#39;</span> <span style="color:#f92672">+</span> i;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (i <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">10</span> <span style="color:#f92672">&amp;&amp;</span> i <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">15</span>) <span style="color:#75715e">// if 10-15 then return A-F
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;A&#39;</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">10</span> <span style="color:#f92672">+</span> i;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> <span style="color:#75715e">// else return null char
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;\0&#39;</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Convert hex digit (0-F) to int (0-15)
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">hex_to_int</span>(<span style="color:#66d9ef">char</span> x) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (x <span style="color:#f92672">&gt;=</span> <span style="color:#e6db74">&#39;0&#39;</span> <span style="color:#f92672">&amp;&amp;</span> x <span style="color:#f92672">&lt;=</span> <span style="color:#e6db74">&#39;9&#39;</span>) <span style="color:#75715e">// if 0-9, return digit
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> x <span style="color:#f92672">-</span> <span style="color:#e6db74">&#39;0&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (x <span style="color:#f92672">&gt;=</span> <span style="color:#e6db74">&#39;A&#39;</span> <span style="color:#f92672">&amp;&amp;</span> x <span style="color:#f92672">&lt;=</span> <span style="color:#e6db74">&#39;F&#39;</span>) <span style="color:#75715e">// if 10-15, return A-F
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> x <span style="color:#f92672">-</span> <span style="color:#e6db74">&#39;A&#39;</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">10</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> <span style="color:#75715e">// else return -1
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The <strong>char_to_hex()</strong> function fills a length 4 character array with 2 hex digits, a space and a null char from character c.
+The <strong>hex_to_char()</strong> function does the reverse.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// Convert char to hex string
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// e.g. &#39;A&#39; -&gt; &#34;41 &#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">char_to_hex</span>(<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> c, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>out) {
+</span></span><span style="display:flex;"><span>    out[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">int_to_hex</span>(c <span style="color:#f92672">/</span> <span style="color:#ae81ff">16</span>); <span style="color:#75715e">// 1st hex digit
+</span></span></span><span style="display:flex;"><span>    out[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">int_to_hex</span>(c <span style="color:#f92672">%</span> <span style="color:#ae81ff">16</span>); <span style="color:#75715e">// 2nd hex digit
+</span></span></span><span style="display:flex;"><span>    out[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39; &#39;</span>; <span style="color:#75715e">// space
+</span></span></span><span style="display:flex;"><span>    out[<span style="color:#ae81ff">3</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;\0&#39;</span>; <span style="color:#75715e">// null char
+</span></span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Convert hex to char
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// e.g. &#34;41 &#34; -&gt; &#39;A&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">char</span> <span style="color:#a6e22e">hex_to_char</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>s) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Return first char * 16 + 2nd char
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">hex_to_int</span>(s[<span style="color:#ae81ff">0</span>]) <span style="color:#f92672">*</span> <span style="color:#ae81ff">16</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">hex_to_int</span>(s[<span style="color:#ae81ff">1</span>]);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="files">Files</h3>
+<p>The <strong>file_to_hex()</strong> and <strong>hex_to_file()</strong> functions loop over a file stored as a character array and call <em>char_to_hex()</em> and <em>hex_to_char()</em> respectively.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// Function to convert each char of a file to hex
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">file_to_hex</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>filename, <span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>buffer) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Open file in read binary mode
+</span></span></span><span style="display:flex;"><span>    FILE <span style="color:#f92672">*</span>rfile <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>(filename, <span style="color:#e6db74">&#34;rb&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>rfile) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">perror</span>(<span style="color:#e6db74">&#34;fopen&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">free</span>(<span style="color:#f92672">*</span>buffer);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Strip path
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>no_path <span style="color:#f92672">=</span> <span style="color:#a6e22e">strrchr</span>(filename, <span style="color:#e6db74">&#39;/&#39;</span>)) {
+</span></span><span style="display:flex;"><span>        filename <span style="color:#f92672">=</span> no_path <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Encode filename as 1st line of file
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (; <span style="color:#f92672">*</span>filename; filename<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">char</span> s[<span style="color:#ae81ff">4</span>];
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">char_to_hex</span>(<span style="color:#f92672">*</span>filename, s);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">buf_add</span>(buffer, s);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">buf_add</span>(buffer, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> c;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// While char read is not EOF (End Of File)
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> ((c <span style="color:#f92672">=</span> <span style="color:#a6e22e">fgetc</span>(rfile)) <span style="color:#f92672">!=</span> EOF) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// if the char isn&#39;t a newline
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (c <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;\n&#39;</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// create a length 4 char array for char_to_hex
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">char</span> s[<span style="color:#ae81ff">4</span>];
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// convert char read into hex digits stored in s
+</span></span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">char_to_hex</span>(c, s);
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// push s onto file buffer
+</span></span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">buf_add</span>(buffer, s);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// print newlines as-is
+</span></span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">buf_add</span>(buffer, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// close file
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fclose</span>(rfile);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Convert a string produced by file_to_hex back into the original file
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">hex_to_file</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>buffer) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Create a read buffer for 3 chars (2 hex + space)
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> buf[<span style="color:#ae81ff">3</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Create a filename buffer
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>filename <span style="color:#f92672">=</span> <span style="color:#a6e22e">malloc</span>(<span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">char</span>));
+</span></span><span style="display:flex;"><span>    filename[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;\0&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Read the 1st line of the buffer to get the filename
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (; <span style="color:#f92672">*</span>buffer <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">*</span>buffer <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;\n&#39;</span>; buffer <span style="color:#f92672">+=</span> <span style="color:#ae81ff">3</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">char</span> add[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> { <span style="color:#a6e22e">hex_to_char</span>(buffer), <span style="color:#e6db74">&#39;\0&#39;</span>};
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">buf_add</span>(<span style="color:#f92672">&amp;</span>filename, add);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Increment buffer by 1 to skip newline
+</span></span></span><span style="display:flex;"><span>    buffer<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// strip path
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>no_path <span style="color:#f92672">=</span> <span style="color:#a6e22e">strrchr</span>(filename, <span style="color:#e6db74">&#39;/&#39;</span>)) {
+</span></span><span style="display:flex;"><span>        filename <span style="color:#f92672">=</span> no_path <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// open file in write binary mode
+</span></span></span><span style="display:flex;"><span>    FILE <span style="color:#f92672">*</span>fptr <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>(filename, <span style="color:#e6db74">&#34;wb&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>fptr) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">perror</span>(<span style="color:#e6db74">&#34;fopen&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// loop through each char in the buffer
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (; <span style="color:#f92672">*</span>buffer; buffer <span style="color:#f92672">+=</span> <span style="color:#ae81ff">3</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// if the buffer has a newline
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">*</span>buffer <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\n&#39;</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// print as is
+</span></span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fprintf</span>(fptr, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// subtract 2 from the buffer so when
+</span></span></span><span style="display:flex;"><span>            <span style="color:#75715e">// it adds 3 at the end of the loop
+</span></span></span><span style="display:flex;"><span>            <span style="color:#75715e">// it has the net effect of doing buffer++
+</span></span></span><span style="display:flex;"><span>            <span style="color:#75715e">// instead
+</span></span></span><span style="display:flex;"><span>            buffer <span style="color:#f92672">-=</span> <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// decode the hex value and print the char
+</span></span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fprintf</span>(fptr, <span style="color:#e6db74">&#34;%c&#34;</span>, <span style="color:#a6e22e">hex_to_char</span>(buffer));
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// close the file pointer and free the filename buffer
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fclose</span>(fptr);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">free</span>(filename);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="buffer-management">Buffer management</h3>
+<p>The character arrays are managed using the <em>buf_add()</em> function, which concatenates 2 strings.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// Function to concatentate 2 strings
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">buf_add</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>buffer, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>add) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Allocate memory for buffer + new + null byte
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">size_t</span> buf_len <span style="color:#f92672">=</span> <span style="color:#a6e22e">strlen</span>(<span style="color:#f92672">*</span>buffer);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">size_t</span> add_len <span style="color:#f92672">=</span> <span style="color:#a6e22e">strlen</span>(add);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>tmp <span style="color:#f92672">=</span> <span style="color:#a6e22e">realloc</span>(<span style="color:#f92672">*</span>buffer, (buf_len <span style="color:#f92672">+</span> add_len <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">char</span>));
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>tmp) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">perror</span>(<span style="color:#e6db74">&#34;realloc&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">*</span>buffer <span style="color:#f92672">=</span> tmp;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Copy add onto buffer
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">memcpy</span>(<span style="color:#f92672">*</span>buffer <span style="color:#f92672">+</span> (buf_len <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">char</span>)), add, add_len <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><hr>
+<h1 id="file-splitting">File splitting</h1>
+<h3 id="filenames">Filenames</h3>
+<p>The files are named after the numbers 1-15 in latin.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// Array of filenames
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>filenames[N_FILES] <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;unum.fractus&#34;</span>, <span style="color:#e6db74">&#34;duo.fractus&#34;</span>, <span style="color:#e6db74">&#34;tres.fractus&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;quattuor.fractus&#34;</span>, <span style="color:#e6db74">&#34;quinque.fractus&#34;</span>, <span style="color:#e6db74">&#34;sex.fractus&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;septem.fractus&#34;</span>, <span style="color:#e6db74">&#34;octo.fractus&#34;</span>, <span style="color:#e6db74">&#34;novem.fractus&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;decem.fractus&#34;</span>, <span style="color:#e6db74">&#34;undecim.fractus&#34;</span>, <span style="color:#e6db74">&#34;duodecim.fractus&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;tredecim.fractus&#34;</span>, <span style="color:#e6db74">&#34;quattuordecim.fractus&#34;</span>, <span style="color:#e6db74">&#34;quindecim.fractus&#34;</span>
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h3 id="splitmerge-functions">Split/Merge functions</h3>
+<p>The file is split using the <strong>split()</strong> function and reconstructed using the <strong>merge()</strong> function.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// Function to split a file stored in a char *
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// into 15 files which are completely different from each other
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// (no non-space char is the same in each position)
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">split</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>file) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// handle null buffer
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>file) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fprintf</span>(stderr, <span style="color:#e6db74">&#34;NULL buffer&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">art</span>(file);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// create 15 file pointers
+</span></span></span><span style="display:flex;"><span>    FILE <span style="color:#f92672">*</span>fptr[N_FILES];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> opened <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Open each file
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> N_FILES; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        fptr[i] <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>(filenames[i], <span style="color:#e6db74">&#34;wb&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>fptr[i]) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">perror</span>(<span style="color:#e6db74">&#34;fopen&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> j <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; j <span style="color:#f92672">&lt;</span> opened; j<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">fclose</span>(fptr[j]);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        opened<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// loop through each char in file
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (; <span style="color:#f92672">*</span>file; file<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// if space or newline, print as is
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">*</span>file <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39; &#39;</span> <span style="color:#f92672">||</span> <span style="color:#f92672">*</span>file <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\n&#39;</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> N_FILES; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">fprintf</span>(fptr[i], <span style="color:#e6db74">&#34;%c&#34;</span>, <span style="color:#f92672">*</span>file);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// create list of all hex values NOT in the file
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> list[N_FILES];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, j <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">16</span>; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (i <span style="color:#f92672">!=</span> <span style="color:#a6e22e">hex_to_int</span>(<span style="color:#f92672">*</span>file) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">hex_to_int</span>(<span style="color:#f92672">*</span>file) <span style="color:#f92672">!=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) {
+</span></span><span style="display:flex;"><span>                list[j<span style="color:#f92672">++</span>] <span style="color:#f92672">=</span> i;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// shuffle list using Fisher-Yates algorithm
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> N_FILES <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>; i<span style="color:#f92672">--</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> j <span style="color:#f92672">=</span> <span style="color:#a6e22e">rand</span>() <span style="color:#f92672">%</span> (i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> t <span style="color:#f92672">=</span> list[i];
+</span></span><span style="display:flex;"><span>            list[i] <span style="color:#f92672">=</span> list[j];
+</span></span><span style="display:flex;"><span>            list[j] <span style="color:#f92672">=</span> t;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Print shuffled hex digit in each file
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> N_FILES; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">char</span> c <span style="color:#f92672">=</span> <span style="color:#a6e22e">int_to_hex</span>(list[i]);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fprintf</span>(fptr[i], <span style="color:#e6db74">&#34;%c&#34;</span>, c);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Close files
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> N_FILES; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fclose</span>(fptr[i]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Function to re-merge files created from split() to obtain original file
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">merge</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>buffer, <span style="color:#66d9ef">int</span> keep) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Open the 15 files
+</span></span></span><span style="display:flex;"><span>    FILE <span style="color:#f92672">*</span>fptr[N_FILES];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> opened <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> N_FILES; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        fptr[i] <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>(filenames[i], <span style="color:#e6db74">&#34;rb&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>fptr[i]) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">perror</span>(<span style="color:#e6db74">&#34;fopen&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> j <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; j <span style="color:#f92672">&lt;</span> opened; j<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">fclose</span>(fptr[j]);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        opened<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> eof_count <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// While true
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>eof_count) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> total <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> c;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> read <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Read a digit from each file
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> N_FILES; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// if digit is EOF, exit
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> ((c <span style="color:#f92672">=</span> <span style="color:#a6e22e">fgetc</span>(fptr[i])) <span style="color:#f92672">==</span> EOF) {
+</span></span><span style="display:flex;"><span>                eof_count<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// if it&#39;s a space or newline, finish the loop without reading
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (read) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (c <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\n&#39;</span> <span style="color:#f92672">||</span> c <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39; &#39;</span>) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">char</span> buf[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> { c, <span style="color:#e6db74">&#39;\0&#39;</span> };
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">buf_add</span>(buffer, buf);
+</span></span><span style="display:flex;"><span>                    read <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>                    <span style="color:#75715e">// add hex value to total
+</span></span></span><span style="display:flex;"><span>                    total <span style="color:#f92672">+=</span> <span style="color:#a6e22e">hex_to_int</span>(c);
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// if total is not 0
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (total) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// find missing value by subtracting from total
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> diff <span style="color:#f92672">=</span> HEX_SUM <span style="color:#f92672">-</span> total;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">char</span> hex <span style="color:#f92672">=</span> <span style="color:#a6e22e">int_to_hex</span>(diff);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>hex) {
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">fprintf</span>(stderr, <span style="color:#e6db74">&#34;Files are corrupted</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> N_FILES; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">fclose</span>(fptr[i]);
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// push hex onto buffer
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">char</span> buf[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> { hex, <span style="color:#e6db74">&#39;\0&#39;</span> };
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">buf_add</span>(buffer, buf);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// If not all files reached EOF, print error
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (eof_count <span style="color:#f92672">!=</span> <span style="color:#ae81ff">15</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fprintf</span>(stderr, <span style="color:#e6db74">&#34;Files have different lengths&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Closed all files
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> N_FILES; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fclose</span>(fptr[i]);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>keep) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">remove</span>(filenames[i]);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">art</span>(<span style="color:#f92672">*</span>buffer);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><hr>
+<h1 id="randomart">Randomart</h1>
+<p>Randomart similar to the ones produced by ssh-keygen are produced by the <strong>art()</strong> function, which hashes the string using the <strong>djb2</strong> algorithm and generates randomart using the <strong>drunken bishop</strong> algorithm.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// Randomart generation using drunken bishop algorithm
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">art</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>s) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>symbols[] <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34; &#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;+&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;┼&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;╪&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;╫&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;╬&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;╳&#34;</span>,
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>start_end[] <span style="color:#f92672">=</span> { <span style="color:#e6db74">&#34;▚&#34;</span>, <span style="color:#e6db74">&#34;▞&#34;</span> };
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> n_symbols <span style="color:#f92672">=</span> <span style="color:#66d9ef">sizeof</span>(symbols) <span style="color:#f92672">/</span> <span style="color:#66d9ef">sizeof</span>(symbols[<span style="color:#ae81ff">0</span>]);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> x <span style="color:#f92672">=</span> ART_WIDTH <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> y <span style="color:#f92672">=</span> ART_HEIGHT <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> count[ART_HEIGHT][ART_WIDTH] <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Generate hash using djb2 algorithm
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> hash <span style="color:#f92672">=</span> <span style="color:#ae81ff">5381</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>c <span style="color:#f92672">=</span> s; <span style="color:#f92672">*</span>c; c<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        hash <span style="color:#f92672">=</span> ((hash <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">5</span>) <span style="color:#f92672">+</span> hash) <span style="color:#f92672">+</span> <span style="color:#f92672">*</span>c;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    count[y][x] <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// For every 2 bits in the hash
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> (<span style="color:#66d9ef">int</span>)(<span style="color:#66d9ef">sizeof</span>(hash) <span style="color:#f92672">*</span> <span style="color:#ae81ff">8</span>); i <span style="color:#f92672">+=</span> <span style="color:#ae81ff">2</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Switch from first 2 bits
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">switch</span> ((hash <span style="color:#f92672">&gt;&gt;</span> i) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0x3</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                x <span style="color:#f92672">=</span> (x <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">?</span> x <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">:</span> x;
+</span></span><span style="display:flex;"><span>                y <span style="color:#f92672">=</span> (y <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">?</span> y <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">:</span> y;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                x <span style="color:#f92672">=</span> (x <span style="color:#f92672">&lt;</span> ART_WIDTH <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">?</span> x <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">:</span> x;
+</span></span><span style="display:flex;"><span>                y <span style="color:#f92672">=</span> (y <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">?</span> y <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">:</span> y;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                x <span style="color:#f92672">=</span> (x <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">?</span> x <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">:</span> x;
+</span></span><span style="display:flex;"><span>                y <span style="color:#f92672">=</span> (y <span style="color:#f92672">&lt;</span> ART_HEIGHT <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">?</span> y <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">:</span> y;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">3</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                x <span style="color:#f92672">=</span> (x <span style="color:#f92672">&lt;</span> ART_WIDTH <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">?</span> x <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">:</span> x;
+</span></span><span style="display:flex;"><span>                y <span style="color:#f92672">=</span> (y <span style="color:#f92672">&lt;</span> ART_HEIGHT <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">?</span> y <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">:</span> y;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">default</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        count[y][x] <span style="color:#f92672">=</span> (count[y][x] <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;&amp;</span> count[y][x] <span style="color:#f92672">&lt;</span> n_symbols <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">?</span> count[y][x] <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">:</span> count[y][x];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    count[y][x] <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;╔&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> ART_WIDTH; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;═&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;╗</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> ART_HEIGHT; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;║&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> j <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; j <span style="color:#f92672">&lt;</span> ART_WIDTH; j<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;%s&#34;</span>, (count[i][j] <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">?</span> symbols[count[i][j]] <span style="color:#f92672">:</span> start_end[(count[i][j] <span style="color:#f92672">*</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>]);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;║</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;╚&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> ART_WIDTH; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;═&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;╝</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><hr>
+
+</content>
+
+
+
+<p>
+  
+</p>
+
+  </main>
+  <footer>Made with <a href="https://github.com/janraasch/hugo-bearblog/">Hugo ʕ•ᴥ•ʔ Bear</a>
+</footer>
+
+  
+</body>
+
+</html>

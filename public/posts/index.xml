@@ -10,15 +10,22 @@
 		
 		
 		
-			<lastBuildDate>Sun, 19 Jul 2026 14:36:59 +0100</lastBuildDate>
+			<lastBuildDate>Mon, 20 Jul 2026 13:28:42 +0100</lastBuildDate>
 		
 			<atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Fractus - A File Splitting Program</title>
+				<link>http://localhost:1313/posts/fractus-a-file-splitting-program/</link>
+				<pubDate>Mon, 20 Jul 2026 13:28:42 +0100</pubDate>
+				<guid>http://localhost:1313/posts/fractus-a-file-splitting-program/</guid>
+				<description>&lt;h1 id=&#34;fractus---a-file-splitting-program&#34;&gt;Fractus - A File Splitting Program&lt;/h1&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://github.com/ZhaolunYin/fractus&#34;&gt;Fractus&lt;/a&gt; is a program that splits a &lt;em&gt;secret file&lt;/em&gt; into 15 files, requiring &lt;strong&gt;all 15 files&lt;/strong&gt; to reconstruct the original. It does this by first hex encoding the &lt;strong&gt;filename&lt;/strong&gt; and &lt;strong&gt;each character&lt;/strong&gt; in the file, then generating 15 different files where no hex character in the &lt;em&gt;same place&lt;/em&gt; as the original file or any other of the 15 files is the &lt;em&gt;same&lt;/em&gt;. This way, the original file can be found by looking at the &lt;em&gt;missing hex char&lt;/em&gt; from each file.&lt;/p&gt;</description>
+			</item>
 			<item>
 				<title>Guess - A Universal Guessing Game</title>
 				<link>http://localhost:1313/posts/guess-a-universal-guessing-game/</link>
 				<pubDate>Sun, 19 Jul 2026 14:36:59 +0100</pubDate>
 				<guid>http://localhost:1313/posts/guess-a-universal-guessing-game/</guid>
-				<description>&lt;h1 id=&#34;guess---a-universal-guessing-game&#34;&gt;Guess - A Universal Guessing Game&lt;/h1&gt;&#xA;&lt;p&gt;The program &lt;a href=&#34;https://github.com/ZhaolunYin/guess&#34;&gt;&lt;strong&gt;Guess&lt;/strong&gt;&lt;/a&gt; implements a variation of &lt;a href=&#34;https://en.wikipedia.org/wiki/Guess_Who%3F&#34;&gt;&lt;strong&gt;Guess Who&lt;/strong&gt;&lt;/a&gt;. The game goes like this:&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-pseudocode&#34; data-lang=&#34;pseudocode&#34;&gt;CPU selects random item in category&#xA;while player does not guess it&#xA;    ask player for input&#xA;    if player asked for trait (e.g. height)&#xA;        print value (e.g. 175cm)&#xA;    else if player guessed correctly&#xA;        print You guessed correctly&#xA;        end&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The game also has a show_all mode where all the traits are shown already and the player only has to guess the item.&lt;/p&gt;</description>
+				<description>&lt;h1 id=&#34;guess---a-universal-guessing-game&#34;&gt;Guess - A Universal Guessing Game&lt;/h1&gt;&#xA;&lt;p&gt;The program &lt;a href=&#34;https://github.com/ZhaolunYin/guess&#34;&gt;&lt;strong&gt;Guess&lt;/strong&gt;&lt;/a&gt; implements a variation of &lt;a href=&#34;https://en.wikipedia.org/wiki/Guess_Who%3F&#34;&gt;&lt;strong&gt;Guess Who&lt;/strong&gt;&lt;/a&gt;. The game goes like this:&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-pseudocode&#34; data-lang=&#34;pseudocode&#34;&gt;CPU selects random item in category&#xA;while player does not guess it&#xA;    ask player for input&#xA;    if player asked for trait (e.g. height)&#xA;        print value (e.g. 175cm)&#xA;    else if player guessed correctly&#xA;        print You guessed correctly&#xA;        end&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The game also has a show all mode where all the traits are shown already and the player only has to guess the item.&lt;/p&gt;</description>
 			</item>
 			<item>
 				<title>RCPL: A C REPL</title>
